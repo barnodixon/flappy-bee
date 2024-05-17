@@ -1,0 +1,63 @@
+[gd_scene load_steps=12 format=3 uid="uid://cyk2j4ybqyfw3"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_vaupu"]
+[ext_resource type="Script" path="res://scripts/Background.gd" id="2_t8g32"]
+[ext_resource type="Texture2D" uid="uid://dlmto4apqsgaj" path="res://assets/environments/background_glacial_mountains.png" id="3_bdqap"]
+[ext_resource type="PackedScene" uid="uid://cthn3jc1hf3qb" path="res://scenes/player.tscn" id="3_f58fu"]
+[ext_resource type="PackedScene" uid="uid://08c0d1ftl381" path="res://scenes/hud.tscn" id="3_isl7a"]
+[ext_resource type="PackedScene" uid="uid://cp6f3he3lw0nb" path="res://scenes/killzone.tscn" id="4_0i41l"]
+[ext_resource type="PackedScene" uid="uid://dykc0g18gynpg" path="res://scenes/boundary.tscn" id="4_rtml4"]
+[ext_resource type="PackedScene" uid="uid://sm0r8u5im2ux" path="res://scenes/obstaclespawner.tscn" id="6_brx0r"]
+[ext_resource type="PackedScene" uid="uid://dv5ienhrr3f23" path="res://scenes/menu_layer.tscn" id="9_74mey"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ikrga"]
+normal = Vector2(0.00877159, 0.999961)
+distance = 0.00877159
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_4ekt6"]
+distance = 6.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_vaupu")
+
+[node name="HUD" parent="." instance=ExtResource("3_isl7a")]
+
+[node name="Background1" type="Sprite2D" parent="."]
+position = Vector2(2, 1)
+scale = Vector2(2, 2)
+texture = ExtResource("3_bdqap")
+centered = false
+script = ExtResource("2_t8g32")
+
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(770, 1)
+scale = Vector2(2, 2)
+texture = ExtResource("3_bdqap")
+centered = false
+script = ExtResource("2_t8g32")
+
+[node name="World Boundaries" type="Node" parent="."]
+
+[node name="World Boundary Top" parent="World Boundaries" instance=ExtResource("4_rtml4")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World Boundaries/World Boundary Top"]
+shape = SubResource("WorldBoundaryShape2D_ikrga")
+
+[node name="World Boundary Bottom" parent="World Boundaries" instance=ExtResource("4_0i41l")]
+position = Vector2(0, 435)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World Boundaries/World Boundary Bottom"]
+shape = SubResource("WorldBoundaryShape2D_4ekt6")
+
+[node name="ObstacleSpawner" parent="." instance=ExtResource("6_brx0r")]
+position = Vector2(770, 216)
+
+[node name="Player" parent="." instance=ExtResource("3_f58fu")]
+position = Vector2(175, 220)
+
+[node name="MenuLayer" parent="." instance=ExtResource("9_74mey")]
+
+[connection signal="died" from="Player" to="." method="_on_player_died"]
+[connection signal="died" from="Player" to="Background1" method="_on_player_died"]
+[connection signal="died" from="Player" to="Background2" method="_on_player_died"]
+[connection signal="start_game" from="MenuLayer" to="." method="_on_menu_layer_start_game"]

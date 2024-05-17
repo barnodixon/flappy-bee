@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://kvxcxjqyayer"]
+
+[ext_resource type="Script" path="res://scripts/obstacle.gd" id="1_jgh7i"]
+[ext_resource type="PackedScene" uid="uid://dch8ueljr7yav" path="res://scenes/wall.tscn" id="2_asmhf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_srawm"]
+size = Vector2(20, 148)
+
+[node name="Obstacle" type="Node2D" groups=["obstacles"]]
+position = Vector2(0, 213.5)
+script = ExtResource("1_jgh7i")
+
+[node name="Wall" parent="." instance=ExtResource("2_asmhf")]
+position = Vector2(0, 75)
+
+[node name="Wall2" parent="." instance=ExtResource("2_asmhf")]
+position = Vector2(0, -75)
+rotation = 3.14159
+
+[node name="ScoreArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreArea"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_srawm")
+
+[connection signal="body_exited" from="ScoreArea" to="." method="_on_score_area_body_exited"]
