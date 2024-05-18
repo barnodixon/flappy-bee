@@ -1,0 +1,1 @@
+A simple Flappy Bird clone to learn how Godot works. Left click to play.
